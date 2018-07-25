@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-logging
+  labels:
+    app: {{ template "knative-build.name" . }}
+    component: config-logging
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  loglevel.autoscaler: info
+  loglevel.controller: info
+  loglevel.queueproxy: info
+  loglevel.webhook: info
+  zap-logger-config: |
+    {
+      "level": "info",
+      "development": false,
+      "sampling": {
+        "initial": 100,
+        "thereafter": 100
+      },
+      "outputPaths": ["stdout"],
+      "errorOutputPaths": ["stderr"],
+      "encoding": "json",
+      "encoderConfig": {
+        "timeKey": "",
+        "levelKey": "level",
+        "nameKey": "logger",
+        "callerKey": "caller",
+        "messageKey": "msg",
+        "stacktraceKey": "stacktrace",
+        "lineEnding": "",
+        "levelEncoder": "",
+        "timeEncoder": "",
+        "durationEncoder": "",
+        "callerEncoder": ""
+      }
+    }

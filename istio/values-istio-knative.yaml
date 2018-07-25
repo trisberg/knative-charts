@@ -1,0 +1,25 @@
+# This is used to generate istio.yaml for use with Knative.
+
+# If running in minikube you may add:
+# --set global.nodePort=true
+global:
+  nodePort: false
+
+ingress:
+  # Ingress is used for migration, for alpha3 we expect ingressgateway
+  enabled: false
+
+sidecarInjectorWebhook:
+  enabled: true
+
+prometheus:
+  enabled: false
+
+grafana:
+  enabled: false
+
+tracing:
+  enabled: false
+
+servicegraph:
+  enabled: false

@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: knative-shared-gateway
+  labels:
+    app: {{ template "knative-serving.name" . }}
+    role: build-controller
+    chart: {{ template "knative-serving.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    knative: ingressgateway
+  servers:
+  - hosts:
+    - '*'
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+  - hosts:
+    - '*'
+    port:
+      name: https
+      number: 443
+      protocol: HTTPS

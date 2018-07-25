@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: controller
+  labels:
+    app: controller
+    role: controller
+    chart: {{ template "knative-serving.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+  - name: metrics
+    port: 9090
+    protocol: TCP
+    targetPort: 9090
+  selector:
+    app: controller
+    release: {{ .Release.Name }}

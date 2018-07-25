@@ -1,0 +1,42 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: build-webhook
+  labels:
+    app: {{ template "knative-build.name" . }}
+    role: build-webhook
+    chart: {{ template "knative-build.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.webhook.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "knative-build.name" . }}
+      role: build-webhook
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "knative-build.name" . }}
+        role: build-webhook
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: build-controller
+        image: "{{ .Values.webhook.image.repository }}:{{ .Values.webhook.image.tag }}"
+        imagePullPolicy: {{ .Values.webhook.image.pullPolicy }}
+        args:
+        - -builder
+        - cluster
+        - -logtostderr
+        - -stderrthreshold
+        - INFO
+        volumeMounts:
+        - mountPath: /etc/config-logging
+          name: config-logging
+      serviceAccountName: build-controller
+      volumes:
+      - configMap:
+          name: config-logging
+        name: config-logging

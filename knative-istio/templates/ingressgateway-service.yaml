@@ -1,0 +1,30 @@
+# Based on: istio/charts/ingressgateway/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: knative-ingressgateway
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    knative: ingressgateway
+spec:
+{{- if .Values.knative.ingressgateway.service.loadBalancerIP }}
+  loadBalancerIP: "{{ .Values.knative.ingressgateway.service.loadBalancerIP }}"
+{{- end }}
+  type: {{ .Values.knative.ingressgateway.service.type }}
+  selector:
+    knative: ingressgateway
+  ports:
+    -
+      name: http
+      nodePort: 32380
+      port: 80
+    -
+      name: https
+      nodePort: 32390
+      port: 443
+    -
+      name: tcp
+      nodePort: 32400
+      port: 32400

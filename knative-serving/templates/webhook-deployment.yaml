@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: webhook
+  labels:
+    app: webhook
+    chart: {{ template "knative-serving.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.webhook.replicaCount }}
+  selector:
+    matchLabels:
+      app: webhook
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: webhook
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: controller
+      containers:
+      - name: webhook
+        image: "{{ .Values.webhook.image.repository }}:{{ .Values.webhook.image.tag }}"
+        imagePullPolicy: {{ .Values.webhook.image.pullPolicy }}
+        volumeMounts:
+        - name: config-logging
+          mountPath: /etc/config-logging
+      volumes:
+        - name: config-logging
+          configMap:
+            name: config-logging

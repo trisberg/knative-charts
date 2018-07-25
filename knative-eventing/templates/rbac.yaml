@@ -1,0 +1,49 @@
+{{- if .Values.rbac.create -}}
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/{{ required "A valid .Values.rbac.apiVersion entry required!" .Values.rbac.apiVersion }}
+metadata:
+  name: knative-channels-bus
+  labels:
+    app: {{ template "knative-eventing.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+rules:
+- apiGroups: ["channels.knative.dev"]
+  resources: ["buses", "clusterbuses", "channels", "subscriptions"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: eventing-controller-admin
+  labels:
+    app: {{ template "knative-eventing.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+subjects:
+  - kind: ServiceAccount
+    name: eventing-controller
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: clusterbus-controller-manage
+subjects:
+  - kind: ServiceAccount
+    name: clusterbus-controller
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: knative-channels-bus
+  apiGroup: rbac.authorization.k8s.io
+{{- end -}}

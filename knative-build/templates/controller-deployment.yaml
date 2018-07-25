@@ -1,0 +1,39 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: build-controller
+  labels:
+    app: {{ template "knative-build.name" . }}
+    role: build-controller
+    chart: {{ template "knative-build.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.controller.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "knative-build.name" . }}
+      role: build-controller
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "knative-build.name" . }}
+        role: build-controller
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: build-controller
+        image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag }}"
+        imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+        args:
+        - -builder
+        - cluster
+        - -logtostderr
+        - -stderrthreshold
+        - INFO
+        - -creds-image
+        - "{{ .Values.controller.credsInit.image.repository }}:{{ .Values.controller.credsInit.image.tag }}"
+        - -git-image
+        - "{{ .Values.controller.gitInit.image.repository }}:{{ .Values.controller.gitInit.image.tag }}"
+      serviceAccountName: build-controller

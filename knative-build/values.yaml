@@ -1,0 +1,37 @@
+# Default values for knative-build.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+  apiVersion: v1beta1
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+controller:
+  replicaCount: 1
+  image:
+    repository: gcr.io/build-crd/github.com/knative/build/cmd/controller@sha256
+    tag: 9220968c9aae7e6edac97effc7b693fcf5bbb17edf78aa14347de87b15ac8840
+    pullPolicy: IfNotPresent
+  credsInit:
+    image:
+      repository: gcr.io/build-crd/github.com/knative/build/cmd/creds-init@sha256
+      tag: cfcc14889abe29b54d17ff6cf414918d9d92ff02bb112525742ec2e30117899f
+  gitInit:
+    image:
+      repository: gcr.io/build-crd/github.com/knative/build/cmd/git-init@sha256
+      tag: d52c29a4a1d83712b048bd32dbb5f97b7d2791af9b892f68fe94e162932ac66e
+
+webhook:
+  replicaCount: 1
+  image:
+    repository: gcr.io/build-crd/github.com/knative/build/cmd/webhook@sha256
+    tag: a7ed8fb8828f71a6aba3f9f9899eff6c867ceb5a8ceeaed903008c2296f919fb
+    pullPolicy: IfNotPresent

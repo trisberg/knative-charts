@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: build-controller
+  labels:
+    app: {{ template "knative-build.name" . }}
+    component: build-controller
+    chart: {{ template "knative-build.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+    - name: metrics
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+  selector:
+    app: {{ template "knative-build.name" . }}
+    component: build-controller
+    release: {{ .Release.Name }}

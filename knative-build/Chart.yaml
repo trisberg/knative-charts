@@ -1,0 +1,17 @@
+apiVersion: v1
+name: knative-build
+version: 0.1.0
+appVersion: 0.1.0
+description: Knative Build
+keywords:
+- kubernetes
+- knative
+- serverless
+home: https://github.com/knative/docs
+icon: https://github.com/knative/docs/raw/master/images/logo/rgb/knative-logo-rgb.jpg
+sources:
+- https://github.com/knative/build
+maintainers:
+- name: trisberg
+  email: trisberg@pivotal.io
+engine: gotpl

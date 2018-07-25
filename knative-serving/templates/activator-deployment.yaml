@@ -1,0 +1,42 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: activator
+  labels:
+    app: activator
+    role: activator
+    chart: {{ template "knative-serving.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.activator.replicaCount }}
+  selector:
+    matchLabels:
+      app: activator
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: activator
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: controller
+      containers:
+      - name: activator
+        image: "{{ .Values.activator.image.repository }}:{{ .Values.activator.image.tag }}"
+        imagePullPolicy: {{ .Values.activator.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8080
+        args:
+        - "-logtostderr=true"
+        - "-stderrthreshold=INFO"
+        volumeMounts:
+        - name: config-logging
+          mountPath: /etc/config-logging
+      volumes:
+        - name: config-logging
+          configMap:
+            name: config-logging

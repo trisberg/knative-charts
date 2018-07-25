@@ -1,0 +1,44 @@
+# Default values for knative-serving.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+  apiVersion: v1beta1
+
+config:
+  autoscaler:
+    enableScaleToZero: "true"
+    scaleToZeroThreshold: "5m"
+  domain:
+    default: ""
+
+controller:
+  replicaCount: 1
+  image:
+    repository: gcr.io/knative-releases/github.com/knative/serving/cmd/controller@sha256
+    tag: d965a7ce7eea3463ede13b715019562ab0a32bfe0e4965c2f0e2f48221d48609
+    pullPolicy: IfNotPresent
+  autoscaler:
+    image:
+      repository: gcr.io/knative-releases/github.com/knative/serving/cmd/autoscaler@sha256
+      tag: fd92d915b4e275c0c28e05ad812d6d5c0159339a1b380a7acb79d9cd0244de15
+  queue:
+    image:
+      repository: gcr.io/knative-releases/github.com/knative/serving/cmd/queue@sha256
+      tag: 90a46fd308cd21ee292bd3159bf84c75d0bb1dc4539fd61b814a3ebd8b74db4b
+
+webhook:
+  replicaCount: 1
+  image:
+    repository: gcr.io/knative-releases/github.com/knative/serving/cmd/webhook@sha256
+    tag: 43b111b4bb74853cb2aabbfc6eda8a6998f434e8192d3054479e0ec44d13a847
+    pullPolicy: IfNotPresent
+
+activator:
+  replicaCount: 1
+  image:
+    repository: gcr.io/knative-releases/github.com/knative/serving/cmd/activator@sha256
+    tag: dfe87fbf1cc25f45648f78b04b25a42b7c5a54267f23911b8576fd326d250237
+    pullPolicy: IfNotPresent

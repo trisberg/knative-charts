@@ -1,0 +1,45 @@
+{{- if .Values.rbac.create -}}
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/{{ required "A valid .Values.rbac.apiVersion entry required!" .Values.rbac.apiVersion }}
+metadata:
+  name: knative-build-admin
+  labels:
+    app: {{ template "knative-build.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "namespaces", "secrets", "events", "serviceaccounts", "configmaps"]
+    verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
+  - apiGroups: ["extensions"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources: ["mutatingwebhookconfigurations"]
+    verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
+  - apiGroups: ["build.knative.dev"]
+    resources: ["builds", "buildtemplates"]
+    verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/{{ required "A valid .Values.rbac.apiVersion entry required!" .Values.rbac.apiVersion }}
+metadata:
+  name: build-controller
+  labels:
+    app: {{ template "knative-build.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: knative-build-admin
+subjects:
+- kind: ServiceAccount
+  name: build-controller
+  namespace: {{ .Release.Namespace }}
+{{- end -}}

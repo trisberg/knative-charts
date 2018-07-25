@@ -1,0 +1,2 @@
+1. Get the resources by running these commands:
+  kubectl get --namespace {{ .Release.Namespace }} all

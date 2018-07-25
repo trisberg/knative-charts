@@ -1,0 +1,22 @@
+# Default values for knative-eventing.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+  apiVersion: v1beta1
+
+controller:
+  replicaCount: 1
+  image:
+    repository: gcr.io/knative-releases/github.com/knative/eventing/cmd/controller@sha256
+    tag: 6769f0e32a48d5623a77d83f31fc3de414654424a0c9af1dde06b613fcb9f060
+    pullPolicy: IfNotPresent
+
+webhook:
+  replicaCount: 1
+  image:
+    repository: gcr.io/knative-releases/github.com/knative/eventing/cmd/webhook@sha256
+    tag: ac57a8b4c743bea16ecf43dff7086d0f47d9ca53bc71274f175f77c697ca63b7
+    pullPolicy: IfNotPresent

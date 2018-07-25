@@ -1,0 +1,12 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: buildtemplates.build.knative.dev
+spec:
+  group: build.knative.dev
+  names:
+    kind: BuildTemplate
+    plural: buildtemplates
+    singular: buildtemplate
+    scope: Namespaced
+  version: v1alpha1

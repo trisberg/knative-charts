@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: build-webhook
+  labels:
+    app: {{ template "knative-build.name" . }}
+    component: build-webhook
+    role: build-webhook
+    chart: {{ template "knative-build.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+    - port: 443
+      targetPort: 443
+  selector:
+    app: {{ template "knative-build.name" . }}
+    component: build-webhook
+    role: build-webhook
+    release: {{ .Release.Name }}

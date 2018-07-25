@@ -1,0 +1,19 @@
+# Based on: istio/charts/ingressgateway/templates/autoscale.yaml
+{{- if .Values.knative.ingressgateway.autoscaleMin }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+    name: knative-ingressgateway
+spec:
+    maxReplicas: {{ .Values.knative.ingressgateway.autoscaleMax }}
+    minReplicas: {{ .Values.knative.ingressgateway.autoscaleMin }}
+    scaleTargetRef:
+      apiVersion: apps/v1beta1
+      kind: Deployment
+      name: knative-ingressgateway
+    metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          targetAverageUtilization: 60
+{{ end }}
