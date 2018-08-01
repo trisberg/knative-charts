@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: autoscaler
+  labels:
+    app: autoscaler
+    chart: {{ template "knative-serving.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    app: autoscaler
+  ports:
+  - name: websocket
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: metrics
+    port: 9090
+    protocol: TCP
+    targetPort: 9090

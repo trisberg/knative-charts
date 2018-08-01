@@ -4,7 +4,6 @@ metadata:
   name: knative-shared-gateway
   labels:
     app: {{ template "knative-serving.name" . }}
-    role: build-controller
     chart: {{ template "knative-serving.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -24,3 +23,5 @@ spec:
       name: https
       number: 443
       protocol: HTTPS
+    tls:
+      mode: PASSTHROUGH

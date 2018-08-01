@@ -18,9 +18,13 @@ metadata:
   name: channels.channels.knative.dev
 spec:
   group: channels.knative.dev
-  version: v1alpha1
   names:
+    categories:
+    - all
+    - knative
+    - eventing
     kind: Channel
     plural: channels
     singular: channel
   scope: Namespaced
+  version: v1alpha1

@@ -18,8 +18,13 @@ metadata:
   name: services.serving.knative.dev
 spec:
   group: serving.knative.dev
-  version: v1alpha1
   names:
+    categories:
+    - all
+    - knative
+    - serving
     kind: Service
     plural: services
+    singular: service
   scope: Namespaced
+  version: v1alpha1

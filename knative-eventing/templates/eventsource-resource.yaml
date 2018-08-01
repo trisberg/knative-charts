@@ -18,8 +18,13 @@ metadata:
   name: eventsources.feeds.knative.dev
 spec:
   group: feeds.knative.dev
-  version: v1alpha1
   names:
+    categories:
+    - all
+    - knative
+    - eventing
     kind: EventSource
     plural: eventsources
+    singular: eventsource
   scope: Namespaced
+  version: v1alpha1

@@ -1,7 +1,4 @@
 # Use --set or additional values.yaml file to configure settings.
-# This file no longer uses sed, updateVersions.sh or istio.VERSIONS
-# TODO: evaluate if we need individual overrides for each component version, istio
-# is not typically tested with a mix of versions. Only supported case is version upgrade.
 
 # Common settings.
 global:
@@ -13,85 +10,15 @@ global:
 
   # Default tag for Istio images.
   # Should track latest released version in the branch.
-  tag: 0.8.0
+  tag: 1.0.0
   proxy:
-    image: proxyv2
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-
-    # istio-sidecar-injector configmap stores configuration for sidecar injection.
-    # This config map is used by istioctl kube-inject and the injector webhook.
-    enableCoreDump: false
-    serviceAccountName: default # used only if RBAC is not enabled
-    replicaCount: 1
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-    # limits:
-    #  cpu: 100m
-    #  memory: 128Mi
-
-    # istio egress capture whitelist
-    # https://istio.io/docs/tasks/traffic-management/egress.html#calling-external-services-directly
-    # example: includeIPRanges: "172.30.0.0/16,172.20.0.0/16"
-    # would only capture egress traffic on those two IP Ranges, all other outbound traffic would
-    # be allowed by the sidecar
-    includeIPRanges: "*"
-    excludeIPRanges: ""
-
-    # istio ingress capture whitelist
-    # examples:
-    #     Redirect no inbound traffic to Envoy:    --includeInboundPorts=""
-    #     Redirect all inbound traffic to Envoy:   --includeInboundPorts="*"
-    #     Redirect only selected ports:            --includeInboundPorts="80,8080"
-    includeInboundPorts: "*"
-    excludeInboundPorts: ""
-    policy: enabled
-
-  proxy_init:
-    image: proxy_init
-
-  # imagePullPolicy is applied to istio control plane components.
-  # local tests require IfNotPresent, to avoid uploading to dockerhub.
-  # TODO: Switch to Always as default, and override in the local tests.
   imagePullPolicy: IfNotPresent
-
-  # Not recommended for user to configure this. Hyperkube image to use when creating custom resources
-  hyperkube:
-    repository: quay.io/coreos/hyperkube
-    tag: v1.7.6_coreos.0
-
   # controlPlaneMtls enabled. Will result in delays starting the pods while secrets are
   # propagated, not recommended for tests.
   controlPlaneSecurityEnabled: false
 
-  # Default mtls policy. If true, mtls between services will be enabled by default.
-  mtls:
-    # Default setting for service-to-service mtls. Can be set explicitly using
-    # destination rules or service annotations.
-    enabled: false
-    # List of fully qualified services to exclude from mtls
-    # TODO: add the templating.
-    mtlsExcludedServices:
-    - "kubernetes.default.svc.cluster.local"
-
   # create RBAC resources. Must be set for any cluster configured with rbac.
   rbacEnabled: true
-
-  ## imagePullSecrets for all ServiceAccount. Must be set for any clustser configured with privte docker registry.
-  # imagePullSecrets:
-  #   - name: "private-registry-key"
-
-  # Default is 1 second
-  refreshInterval: 10s
-
-  # Enable multicluster operation.  Must be set to true if multicluster operation
-  # is desired.
-  multicluster:
-    enabled: false
 
   # Specify pod scheduling arch(amd64, ppc64le, s390x) and weight as follows:
   #   0 - Never scheduled
@@ -102,10 +29,6 @@ global:
     amd64: 2
     s390x: 2
     ppc64le: 2
-
-# Any customization for istio testing should be here
-istiotesting:
-  oneNameSpace: false
 
 #
 # knative ingressgateway configuration
@@ -125,30 +48,9 @@ knative:
   #  cpu: 100m
   #  memory: 128Mi
     service:
-      name: istio-ingressgateway #DNS addressible
-      labels:
-        istio: ingressgateway
-      #namespace: istio-system
       loadBalancerIP: ""
       type: LoadBalancer #change to NodePort, ClusterIP or LoadBalancer if need be
-      ports:
-        ## You can add custom gateway ports
-      - port: 80
-        name: http
-        nodePort: 31380
-      - port: 443
-        name: https
-        nodePort: 31390
-      - port: 31400
-        name: tcp
-        nodePort: 31400
     deployment:
-      labels:
-        istio: ingressgateway #will be added to pods and service
-      ports:
-      - containerPort: 80
-      - containerPort: 443
-      - containerPort: 31400
       secretVolumes:
       - name: ingressgateway-certs
         secretName: istio-ingressgateway-certs

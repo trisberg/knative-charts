@@ -18,9 +18,13 @@ metadata:
   name: subscriptions.channels.knative.dev
 spec:
   group: channels.knative.dev
-  version: v1alpha1
   names:
+    categories:
+    - all
+    - knative
+    - eventing
     kind: Subscription
     plural: subscriptions
     singular: subscription
   scope: Namespaced
+  version: v1alpha1

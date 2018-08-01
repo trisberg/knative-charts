@@ -18,9 +18,13 @@ metadata:
   name: buses.channels.knative.dev
 spec:
   group: channels.knative.dev
-  version: v1alpha1
   names:
+    categories:
+    - all
+    - knative
+    - eventing
     kind: Bus
     plural: buses
     singular: bus
   scope: Namespaced
+  version: v1alpha1

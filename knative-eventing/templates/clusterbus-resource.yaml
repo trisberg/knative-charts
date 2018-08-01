@@ -18,9 +18,13 @@ metadata:
   name: clusterbuses.channels.knative.dev
 spec:
   group: channels.knative.dev
-  version: v1alpha1
   names:
+    categories:
+    - all
+    - knative
+    - eventing
     kind: ClusterBus
     plural: clusterbuses
     singular: clusterbus
   scope: Cluster
+  version: v1alpha1

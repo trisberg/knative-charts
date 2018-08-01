@@ -1,0 +1,45 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: autoscaler
+  labels:
+    app: autoscaler
+    chart: {{ template "knative-serving.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.autoscaler.replicaCount }}
+  selector:
+    matchLabels:
+      app: autoscaler
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: autoscaler
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: controller
+      containers:
+      - name: autoscaler
+        image: "{{ .Values.autoscaler.image.repository }}:{{ .Values.autoscaler.image.tag }}"
+        imagePullPolicy: {{ .Values.autoscaler.image.pullPolicy }}
+        ports:
+        - containerPort: 8080
+          name: websocket
+        - containerPort: 9090
+          name: metrics
+        volumeMounts:
+        - mountPath: /etc/config-autoscaler
+          name: config-autoscaler
+        - mountPath: /etc/config-logging
+          name: config-logging
+      volumes:
+      - configMap:
+          name: config-autoscaler
+        name: config-autoscaler
+      - configMap:
+          name: config-logging
+        name: config-logging

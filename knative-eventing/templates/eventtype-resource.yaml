@@ -18,8 +18,13 @@ metadata:
   name: eventtypes.feeds.knative.dev
 spec:
   group: feeds.knative.dev
-  version: v1alpha1
   names:
+    categories:
+    - all
+    - knative
+    - eventing
     kind: EventType
     plural: eventtypes
+    singular: eventtype
   scope: Namespaced
+  version: v1alpha1

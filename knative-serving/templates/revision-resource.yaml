@@ -18,8 +18,13 @@ metadata:
   name: revisions.serving.knative.dev
 spec:
   group: serving.knative.dev
-  version: v1alpha1
   names:
+    categories:
+    - all
+    - knative
+    - serving
     kind: Revision
     plural: revisions
+    singular: revision
   scope: Namespaced
+  version: v1alpha1

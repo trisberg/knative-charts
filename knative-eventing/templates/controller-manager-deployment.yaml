@@ -1,32 +1,32 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: eventing-controller
+  name: controller-manager
   labels:
-    app: eventing-controller
+    app: controller-manager
     chart: {{ template "knative-eventing.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.controller.replicaCount }}
+  replicas: {{ .Values.controllerManager.replicaCount }}
   selector:
     matchLabels:
-      app: eventing-controller
+      app: controller-manager
       release: {{ .Release.Name }}
   template:
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
       labels:
-        app: eventing-controller
+        app: controller-manager
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: eventing-controller
-      replicas: {{ .Values.controller.replicaCount }}
+      replicas: {{ .Values.controllerManager.replicaCount }}
       containers:
-      - name: eventing-controller
-        image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag }}"
-        imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+      - name: controller-manager
+        image: "{{ .Values.controllerManager.image.repository }}:{{ .Values.controllerManager.image.tag }}"
+        imagePullPolicy: {{ .Values.controllerManager.image.pullPolicy }}
         args:
         - -logtostderr
         - -stderrthreshold

@@ -15,16 +15,16 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: routes.serving.knative.dev
+  name: clustereventsources.feeds.knative.dev
 spec:
-  group: serving.knative.dev
+  group: feeds.knative.dev
   names:
     categories:
     - all
     - knative
-    - serving
-    kind: Route
-    plural: routes
-    singular: route
-  scope: Namespaced
+    - eventing
+    kind: ClusterEventSource
+    plural: clustereventsources
+    singular: clustereventsource
+  scope: Cluster
   version: v1alpha1

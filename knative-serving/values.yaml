@@ -18,27 +18,34 @@ controller:
   replicaCount: 1
   image:
     repository: gcr.io/knative-releases/github.com/knative/serving/cmd/controller@sha256
-    tag: d965a7ce7eea3463ede13b715019562ab0a32bfe0e4965c2f0e2f48221d48609
+    tag: 60b567eac333c20a86b52eb7b6de7f557e75abd41769530660ee7a03b03ece0c
     pullPolicy: IfNotPresent
   autoscaler:
     image:
       repository: gcr.io/knative-releases/github.com/knative/serving/cmd/autoscaler@sha256
-      tag: fd92d915b4e275c0c28e05ad812d6d5c0159339a1b380a7acb79d9cd0244de15
+      tag: 4439203216f64e89d5e9c6084307c8f22a6d50c47f9780b29cd9310decad580e
   queue:
     image:
       repository: gcr.io/knative-releases/github.com/knative/serving/cmd/queue@sha256
-      tag: 90a46fd308cd21ee292bd3159bf84c75d0bb1dc4539fd61b814a3ebd8b74db4b
+      tag: e844413efdf85deee7f7e677b2c267799a5385f92b61374cf74a48f3a278a789
+
+autoscaler:
+  replicaCount: 1
+  image:
+    repository: gcr.io/knative-releases/github.com/knative/serving/cmd/multitenant-autoscaler@sha256
+    tag: a24e01989ceda0a6299f1595203433a9d99a4119bd9eb837d1af1edfabba9ab4
+    pullPolicy: IfNotPresent
 
 webhook:
   replicaCount: 1
   image:
     repository: gcr.io/knative-releases/github.com/knative/serving/cmd/webhook@sha256
-    tag: 43b111b4bb74853cb2aabbfc6eda8a6998f434e8192d3054479e0ec44d13a847
+    tag: 550594401aea26472a7dfc03b5ab957012c0057c28b1876bda85ec70fd2ffdaa
     pullPolicy: IfNotPresent
 
 activator:
   replicaCount: 1
   image:
     repository: gcr.io/knative-releases/github.com/knative/serving/cmd/activator@sha256
-    tag: dfe87fbf1cc25f45648f78b04b25a42b7c5a54267f23911b8576fd326d250237
+    tag: 1b0d7f14e81fb15bb4f674e717e855b3fad476807f6e5e6a3cf0f8efcf1c1e05
     pullPolicy: IfNotPresent

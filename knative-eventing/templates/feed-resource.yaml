@@ -18,8 +18,13 @@ metadata:
   name: feeds.feeds.knative.dev
 spec:
   group: feeds.knative.dev
-  version: v1alpha1
   names:
+    categories:
+    - all
+    - knative
+    - eventing
     kind: Feed
     plural: feeds
+    singular: feed
   scope: Namespaced
+  version: v1alpha1
